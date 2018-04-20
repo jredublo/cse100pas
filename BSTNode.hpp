@@ -45,14 +45,55 @@ public:
 template <typename Data>
 BSTNode<Data>::BSTNode(const Data & d) : data(d), left(0), right(0), parent(0) {}
 
+
+
+
 /* Return a pointer to the BSTNode that contains the item that is sequentially next 
  * in the tree */
 template <typename Data>
 BSTNode<Data>* BSTNode<Data>::successor()
 {
-  //TODO 
+  //TODO
+  // if the node is the only node in the tree
+  if(!this->right && !this->parent) {
+    return NULL;
+  }
+
+  //if the node has no right children
+  if(!this->right){
+    // check if 
+    BSTNode<Data>* current = this;
+    BSTNode<Data>* par = current->parent;
+    while(current != par->left) {
+        
+        if (par->parent) {  // check if a parent exists
+            BSTNode<Data>* temp = par;
+            current = par;
+            par = temp->parent;
+        }
+        else
+            return NULL;
+    } 
+    return current->parent;
+  }
+  
+  //if the node has a right subtree
+  else {
+    BSTNode<Data>* node;
+    node = this->right;
+    while(node->left){
+      node = node->left;  
+    }
+    return node;
+  }
   return NULL;
+
+
+
 }
+
+
+
 
 /** Overload operator<< to print a BSTNode's fields to an ostream. */
 template <typename Data>

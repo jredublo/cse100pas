@@ -46,14 +46,6 @@ bool BSTInt::insert(int item)
     }
   }
 
-  //if (curr->left && !curr->right) {
-     
-  //}
-
-  //if (!curr->left && curr->right) {
-  
-  //}
-
   // Ready to insert
   BSTNodeInt* newNode = new BSTNodeInt(item);
   while (inserted == 0) {
@@ -78,6 +70,7 @@ bool BSTInt::insert(int item)
         }
     }
     else {
+        delete newNode;
         return false; // duplicate
     }
   }

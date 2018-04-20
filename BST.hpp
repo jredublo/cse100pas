@@ -18,25 +18,49 @@
 template<typename Data>
 class BST {
 
-/*   ------ MEMBER AND FUNCTION DECLARATIONS ------    */
+/*   --------- MEMBER AND FUNCTION DECLARATIONS ---------    */
 public:
 
-  /** Iterator as alias typename for BSTIterator<Data>. */
-  typedef BSTIterator<Data> iterator;  // TODO TODO TODO TODO
+    typedef BSTIterator<Data> iterator;  // TODO Iterator as alias typename for BSTIterator<Data>
+    
+    BST() : root(nullptr), isize(0) {}                  // CONSTRUCTOR default
+    ~BST();                                             // DESTRUCTOR default
+    
+    std::pair<iterator, bool> insert(const Data& item); // INSERTs copy of Data item into BST
+    iterator find(const Data& item) const;              // FINDs Data item in BST
+    unsigned int size() const;                          // SIZE, num elements in BST
+    
+    int height() const;                                 // HEIGHT of BST (empty -1, root 0)
+   // int heightHelp( BSTNode<Data>* n ) const;              // recursive helper function for height()
+    
+    bool empty() const;                                 // true if empty, otherwise false
+    
+    iterator begin() const;                             // returns iterator pointing at smallest item in BST
+    iterator end() const;                               // returns iterator pointing past last item in BST
 
 
-  /** FUNCT:    bst()
-   *  DESCR:    default constructor, initializes empty BST.
-   *  PARAM:    none    (inclined bc trivial)
-   */
-  BST() : root(nullptr), isize(0) {}
+private:
 
+    int heightHelp( BSTNode<Data>* n ) const;              // recursive helper function for height()
+  BSTNode<Data>* root;  // Pointer to root of this BST, or 0 if empty
+  unsigned int isize;   // Number of Data items stored in this BST
+  static BSTNode<Data>* first(BSTNode<Data>* root); // Find first element of BST, helper for begin method
+  static void deleteAll(BSTNode<Data>* n);  // Deletes nodes in postorder transversal
+
+};
+
+
+/*   ---------- FUNCTION DEFINITIONS ----------    */
 
   /** FUNCT:    ~bst()
    *  DESCR:    default destructor, deletes every node in BST. 
    *  PARAM:    none
    */
-  ~BST();
+template <typename Data>
+BST<Data>::~BST() {
+    deleteAll(root);
+}
+
 
   /** FUNCT:    insert( item )
    *  DESCR:    inserts copy of given Data item into BST.
@@ -46,7 +70,76 @@ public:
    *            successfully
    */
   // should use only '<' operator when comparing Data items. (not ==,>,<=,>=)
-  std::pair<iterator, bool> insert(const Data& item);
+template <typename Data>
+std::pair<BSTIterator<Data>, bool> BST<Data>::insert(const Data& item) {
+    //std::pair<BSTIterator<Data>, bool> pair(asdfsad, false);
+    int inserted = 0;
+
+    // empty tree
+    if (!root) {
+        root = new BSTNode<Data>(item);
+        ++isize;
+        BSTIterator<Data> iter = BSTIterator<Data>(root);
+        std::pair<BSTIterator<Data>, bool> pair(iter, true);
+        return pair;
+    }
+
+    BSTNode<Data>* curr = root;
+  
+    // two children
+    while (curr->left && curr->right) {
+        if (item < curr->data) {
+            curr = curr->left;
+        }
+        else if (curr->data < item) {
+            curr = curr->right;
+        }
+        else {
+            BSTIterator<Data> iter = BSTIterator<Data>(curr);
+            std::pair<BSTIterator<Data>, bool> pair(iter, false);
+            return pair;  // duplicate
+        }
+    }
+
+    // Ready to insert
+    BSTNode<Data>* newNode = new BSTNode<Data>(item);
+    while (inserted == 0) {
+        if (item < curr->data) {
+            if (curr->left) {
+                curr=curr->left;
+            }
+            else {
+                curr->left = newNode;
+                newNode->parent = curr;
+                inserted = 1;
+            }
+        }
+        else if(curr->data < item) {
+            if (curr->right) {
+                curr=curr->right;
+            }
+            else {
+                curr->right = newNode;
+                newNode->parent = curr;
+                inserted = 1;
+            }
+        }
+        else {
+            BSTIterator<Data> iter = BSTIterator<Data>(curr);
+            std::pair<BSTIterator<Data>, bool> pair(iter, false);
+            delete newNode;
+            return pair;  // duplicate
+
+        }
+    }
+
+    ++isize;
+    BSTIterator<Data> iter = BSTIterator<Data>(newNode);
+    std::pair<BSTIterator<Data>, bool> pair(iter, true);
+    return pair;  // duplicate
+
+  //return std::pair<BSTIterator<Data>, bool>(BSTIterator<Data>(0), false);
+}
 
 
   /** FUNCT:    find( item )
@@ -56,7 +149,33 @@ public:
    *            found
    */
   // should use only '<' operator when comparing Data items. (not ==,>,<=,>=)
-  iterator find(const Data& item) const;
+template <typename Data>
+BSTIterator<Data> BST<Data>::find(const Data& item) const
+{
+    BSTNode<Data>* curr = root;
+    while (curr) {
+        if (curr->data < item) {
+            if (!curr->right) {
+                return end();
+            }
+
+            curr = curr->right;
+        }
+        else if (item < curr->data) {
+
+            if (!curr->left) {
+                return end();
+            }
+
+            curr = curr->left;
+        }
+        else {
+            return BSTIterator<Data>(curr);
+        }
+    }
+    
+    return end();
+}
 
   
   /** FUNCT:    size() 
@@ -64,209 +183,37 @@ public:
    *  PARAM:    none
    *  RETURN:   int, the number of items in BST
    */ 
-  unsigned int size() const;
-  
-  /** FUNCT:    height() 
-   *  DESCR:    gets height of the BST (root is level 0, empty is -1)
-   *  PARAM:    none
-   *  RETURN:   int, the height of the BST
-   */ 
-   int height() const;
-   int heightHelp( BSTNodeInt* n ) const;
-
-
-  /** FUNCT:    empty()
-   *  DESCR:    checks if BST is empty
-   *  PARAM:    none
-   *  RETURN:   true if BST empty, else false
-   */
-  bool empty() const;
-
-  /** FUNCT:    begin()
-   *  DESCR:    gets iterator at the smallest item in tree
-   *  PARAM:    none
-   *  RETURN:   iterator pointing to first (smallest) item in BST
-   */ 
-  iterator begin() const;
-
-  /** FUNCT:    end()
-   *  DESCR:    gets iterator past last item in tree
-   *  PARAM:    none
-   *  RETURN:   iterator pointing past last item in BST
-   */
-  iterator end() const;
-
-
-private:
-
-  BSTNode<Data>* root;  // Pointer to root of this BST, or 0 if empty
-  unsigned int isize;   // Number of Data items stored in this BST
-  static BSTNode<Data>* first(BSTNode<Data>* root); // Find first element of BST, helper for begin method
-  static void deleteAll(BSTNode<Data>* n);  // Deletes nodes in postorder transversal
-
-};
-
-
-/*   ------ FUNCTION DEFINITIONS ------    */
-
-
-/** Default destructor.
-    Delete every node in this BST.
-*/
-template <typename Data>
-BST<Data>::~BST() {
-  deleteAll(root);
-}
-
-
-/** Given a reference to a Data item, insert a copy of it in this BST.
- *  Return a pair where the first element is an iterator pointing to either the newly inserted
- *  element or the element that was already in the BST, and the second element is true if the 
- *  element was newly inserted or false if it was already in the BST.
- * 
- *  Note: This function should use only the '<' operator when comparing
- *  Data items. (should not use ==, >, <=, >=)  
- */
-template <typename Data>
-std::pair<BSTIterator<Data>, bool> BST<Data>::insert(const Data& item) {
-  //std::pair<BSTIterator<Data>, bool> pair(asdfsad, false);
-  int inserted = 0;
-
-  // empty tree
-  if (!root) {
-    root = new BSTNodeInt(item);
-    ++isize;
-    BSTIterator<Data> iter;
-    iter = BSTIterator<Data>(root);
-    std::pair<BSTIterator<Data>, bool> pair(iter, true);
-    return pair;
-  }
-
-  BSTNodeInt* curr = root;
-  
-  // two children
-  while (curr->left && curr->right) {
-    if (item < curr->data) {
-      curr = curr->left;
-    }
-    else if (curr->data < item) {
-      curr = curr->right;
-    }
-    else {
-        BSTIterator<Data> iter;
-        iter = BSTIterator<Data>(curr);
-        std::pair<BSTIterator<Data>, bool> pair(iter, false);
-        return pair;  // duplicate
-    }
-  }
-
-  // Ready to insert
-  BSTNodeInt* newNode = new BSTNodeInt(item);
-  while (inserted == 0) {
-    if (item < curr->data) {
-        if (curr->left) {
-            curr=curr->left;
-        }
-        else {
-            curr->left = newNode;
-            newNode->parent = curr;
-            inserted = 1;
-        }
-    }
-    else if(curr->data < item) {
-        if (curr->right) {
-            curr=curr->right;
-        }
-        else {
-            curr->right = newNode;
-            newNode->parent = curr;
-            inserted = 1;
-        }
-    }
-    else {
-        BSTIterator<Data> iter;
-        iter = BSTIterator<Data>(curr);
-        std::pair<BSTIterator<Data>, bool> pair(iter, false);
-        return pair;  // duplicate
-    }
-  }
-
-  ++isize;
-  BSTIterator<Data> iter;
-  iter = BSTIterator<Data>(newNode);
-  std::pair<BSTIterator<Data>, bool> pair(iter, true);
-  return pair;  // duplicate
-
-  //return std::pair<BSTIterator<Data>, bool>(BSTIterator<Data>(0), false);
-}
-
-
-/** Find a Data item in the BST.
- *  Return an iterator pointing to the item, or pointing past
- *  the last node in the BST if not found.
- *  Note: This function should use only the '<' operator when comparing
- *  Data items. (should not use ==, >, <=, >=).  For the reasoning
- *  behind this, see the assignment writeup.
- */
-template <typename Data>
-BSTIterator<Data> BST<Data>::find(const Data& item) const
-{
-    BSTNodeInt* curr = root;
-    while (curr) {
-    if (curr->data < item) {
-      
-      if (!curr->right) {
-        return end();
-      }
-      
-      curr = curr->right;
-    }
-    else if (item < curr->data) {
-
-     if (!curr->left) {
-        return end();
-     }
-
-     curr = curr->left;
-    }
-    else {
-      return BSTIterator<Data>(curr);
-    }
-  }
-  
-  return end();
-}
-
-  
-/** Return the number of items currently in the BST.
- */ 
 template <typename Data>
 unsigned int BST<Data>::size() const
 {
   return isize;
 }
 
-/** Return the height of the BST.
- */
+  /** FUNCT:    height() 
+   *  DESCR:    gets height of the BST (root is level 0, empty is -1)
+   *  PARAM:    none
+   *  RETURN:   int, the height of the BST
+   */ 
 template <typename Data> 
 int BST<Data>::height() const
 {
-  //if tree is empty
-  if(empty()) {
-    return -1;
-  }
+    //if tree is empty
+    if(empty()) {
+        return -1;
+    }
     
-  else {
-    int max = heightHelp(root);
-    return max -1;
-  }
+    else {
+        int max = heightHelp(root);
+        return max -1;
+    }
 
-  return 0;
+    return 0;
 }
 
 
 // HEIGHT RECURSION
-int BST<Data>::heightHelp( BSTNodeInt* n )  const  {
+template <typename Data>
+int BST<Data>::heightHelp( BSTNode<Data>* n )  const  {
 
     if (!n) {
         return 0;
@@ -291,50 +238,60 @@ int BST<Data>::heightHelp( BSTNodeInt* n )  const  {
 
         return max + 1;
     }
-
 }
 
 
-/** Return true if the BST is empty, else false.
- */ 
+  /** FUNCT:    empty()
+   *  DESCR:    checks if BST is empty
+   *  PARAM:    none
+   *  RETURN:   true if BST empty, else false
+   */
 template <typename Data>
 bool BST<Data>::empty() const
 {
-  if (!root || isize == 0) {
-    return true;
-  }
-
-  return false;
+    if (!root || isize == 0) {
+        return true;
+    }
+    return false;
 }
 
-/** Return an iterator pointing to the first (smallest) item in the BST.
- */ 
+
+  /** FUNCT:    begin()
+   *  DESCR:    gets iterator at the smallest item in tree
+   *  PARAM:    none
+   *  RETURN:   iterator pointing to first (smallest) item in BST
+   */ 
 template <typename Data>
 BSTIterator<Data> BST<Data>::begin() const
 {
-  return BSTIterator<Data>(first(root));
+    return BSTIterator<Data>(first(root));
 }
 
-/** Return an iterator pointing past the last item in the BST.
- */
+
+
+  /** FUNCT:    end()
+   *  DESCR:    gets iterator past last item in tree
+   *  PARAM:    none
+   *  RETURN:   iterator pointing past last item in BST
+   */
 template <typename Data>
 BSTIterator<Data> BST<Data>::end() const
 {
-  return BSTIterator<Data>(nullptr);
+    return BSTIterator<Data>(nullptr);
 }
 
-/** Find the first element of the BST
- * Helper function for the begin method above.
- */ 
+  /** Find the first element of the BST
+   *  Helper function for the begin() method above.
+   */ 
 template <typename Data>
 BSTNode<Data>* BST<Data>::first(BSTNode<Data>* root)
 {
-  // CHECK THIS
-  if (root->left) {
-    return first(root->left);
-  }
-  else
-    return root;
+    // CHECK THIS
+    if (root->left) {
+        return first(root->left);
+    }
+    else
+        return root;
 }
 
 /** do a postorder traversal, deleting nodes
@@ -342,18 +299,18 @@ BSTNode<Data>* BST<Data>::first(BSTNode<Data>* root)
 template <typename Data>
 void BST<Data>::deleteAll(BSTNode<Data>* n)
 {
-  if (!n)
-      return;
+    if (!n)
+        return;
 
-  else {
-    if(n->left)
-        deleteAll(n->left);
+    else {
+        if(n->left)
+            deleteAll(n->left);
 
-    if(n->right)
-        deleteAll(n->right);
+        if(n->right)
+            deleteAll(n->right);
 
-    delete n;
-  }
+        delete n;
+    }
 }
 
 

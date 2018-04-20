@@ -188,9 +188,10 @@ int main() {
         cout << "empty() works on non empty tree" << endl;
     }
 
-    /* UNCOMMENT THE LINES BELOW TO TEST THE TEMPLATE-BASED ITERATOR */
 
-    /*
+
+
+    /* UNCOMMENT THE LINES BELOW TO TEST THE TEMPLATE-BASED ITERATOR */
     // Test the template version of the BST  with ints 
     BST<int> btemp;
     for (int item : v) {
@@ -210,7 +211,6 @@ int main() {
         cout << "success!" << endl;
               
     }
-
     // Now test finding the elements we just put in
     for (int item: v) {
         cout << "Finding " << item << "...." << endl;
@@ -223,11 +223,7 @@ int main() {
         }
         cout << "success!" << endl;
     }
-
-
-
     // Test the iterator: The iterator should give an in-order traversal
-  
     // Sort the vector, to compare with inorder iteration on the BST
     sort(v.begin(),v.end());
 
@@ -258,19 +254,112 @@ int main() {
 
     cout << "success!" << endl;
 
-    */
-
-    // ADD MORE TESTS HERE.  You might also want to change what is input
-    // into the vector v.
-    //b.deleteAll(root);
-    //chain.deleteAll(root);
-    //chain2.deleteAll(root);
-    //delete &b;
-    //delete &chain;
-    //delete &chain2;
 
 
+    BST<char> charTree;
+    
+    if (charTree.height() != -1) {
+        cout << "Height incorrect for empty tree. SHould be -1, but is " << charTree.height() << endl;
+        return -1;
+    }
+    
+    if (charTree.empty() != true) {
+        cout << "Empty() incorrect for empty tree. Should be false." << endl;
+        return -1;
+    }
 
+    auto j = charTree.insert('J');
+    if (*(j.first) != 'J') {
+        cout << "Wrong iterator returned from insert." << endl;
+        return -1;
+    }
+
+    if (charTree.height() != 0) {
+        cout << "Height incorrect for root only tree. Should be 0 but is " << charTree.height() << endl;
+        return -1;
+    }
+
+    auto c = charTree.insert('C');
+    if ( (c.first).operator*() != 'C' ) {
+        cout << "Insert failed. Should be C but is " << (c.first).operator*() << endl;
+        return -1;
+    }
+    auto a = charTree.insert('A');
+    auto d =charTree.insert('D');
+    auto w = charTree.insert('W');
+    if ( (w.first).operator*() != 'W' ) {
+        cout << "Insert failed. Should be W but is " << (w.first).operator*() << endl;
+        return -1;
+    }
+
+    if (charTree.height() != 2) {
+        cout << "Height incorrect. Should be 2, but is " << charTree.height() << endl;
+        return -1;
+    }
+    if (charTree.size() != 5) {
+        cout << "Size does not equal 5. Is " << charTree.size() << endl;
+        return -1;
+    }
+     
+    charTree.insert('D'); // duplicate
+    if (charTree.height() != 2 || charTree.size() != 5) {
+        cout << "Height or Size incorrect for duplicate insertions." << endl;
+        return -1;
+    }
+    auto iter1 = charTree.find('C');
+    if ( iter1.operator*() != 'C' ) {
+        cout << "Find failed. Should be C but is " << iter1.operator*() << endl;
+        return -1;
+    
+    }    
+    auto iter2 = charTree.find('X');
+    if (iter2.operator*()) {
+        cout << "Found element that should not be in tree." << endl;
+        return -1;
+    }
+
+
+    // testing successor and operator
+    if ( *(j.first).operator++() != 'W' ) {
+        cout << "Successor and pre increment op failed. Should be W." << endl;
+        return -1;
+    }
+    if ( *(a.first).operator++() != 'C' ) {
+        cout << "Successor and pre increment op failed. Should be C." << endl;
+        return -1;
+    }
+    if ( *(w.first).operator++() ) {
+        cout << "Successor and preincrement op failed. Should be NULL" << endl;
+        return -1;
+    }
+    if ( *(d.first).operator++() != 'J' ) {
+        cout << "Successor and pre increment op failed. Should be J." << endl;
+        return -1;
+    }
+
+    *(a.first).operator++();
+    if ( *(a.first).operator++() != 'J' ) {
+        cout << "Double successor failed. Should be J." << endl;
+        return -1;
+    }
+    
+    // testing equality and inequality operators
+    if ( (d.first).operator==((a.first)) == false ) {
+        cout << "Equality operator did not work." << endl;
+        return -1;
+    }
+    if ( (w.first).operator!=((a.first)) == false) {
+        cout << "Inequality operator did not work." << endl;
+        return -1;
+    }
+    
+   // testing post increment operator
+   char shouldJ = *(d.first).operator++(0);
+   char shouldW = (d.first).operator*();
+   if (shouldJ != 'J' || shouldW != 'W') {
+      cout << "Post increment doesn't work" << endl;
+      return -1;
+   }
     cout << "All tests passed!" << endl;
     return 0;
 }

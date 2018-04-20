@@ -49,18 +49,18 @@ int main(int argc, char* argv[])
         // Follow the comments below to add code:
         
         // TODO: Create a new BST here
+        BST<std::string>* tree = new BST<std::string>();
 
-        
         while (getline(in, name)) {
             // TODO: add the name string to the BST
-
+            tree->insert(name);
             
         }
 
         // TODO: Get the height of the BST and store it in height
-
+        height = tree->height();
         // TODO: Get the size of the BST and store it in size
-
+        size = tree->size();
         // DO NOT CHANGE THE LINES BELOW
         cout << "Size of tree: " << size << endl;
         cout << "Height of tree: " << height << endl;
@@ -70,8 +70,8 @@ int main(int argc, char* argv[])
             cout << "Enter actor/actress name: " << endl;
             getline(cin, name);
             
-            // TODO: Chainge the if statment to check is name is in the BST
-            if (true) {
+            // TODO: Change the if statment to check if name is in the BST
+            if (tree->find(name) != NULL) {
                 cout << name << " found!" << endl;
             }
             else {
