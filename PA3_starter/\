@@ -1,0 +1,126 @@
+// File: HCTREE.cpp
+#include "HCTree.h"
+#include <iostream>
+#include <queue>
+
+using namespace std;
+
+void HCTree::build(const vector<int>& freqs) {
+    priority_queue<HCNode*> q;
+    for (unsigned int i = 0; i < freqs.size(); i++) {
+      int currentCount = freqs.at(i);
+      if (currentCount != 0) {
+        // make single forests
+        HCNode* newNode = new HCNode(currentCount, (byte)i, 0, 0, 0);
+        // TODO may have to change
+        leaves.at(i) = newNode;
+        q.push(newNode);
+      }
+    }
+
+    while (q.size() > 1) {
+      // get lowest two, which are at top of q (back)TODO
+      HCNode* small = q.top();
+      q.pop();
+      HCNode* nextSmall = q.top();
+      q.pop();
+      int sumInt = small->count + nextSmall->count;
+      HCNode* sum = new HCNode(sumInt,0,0,0,0);
+      
+      // adjusting pointers
+      small->p = sum;
+      nextSmall->p = sum;
+      p->c0 = small;
+      p->c1 = nextSmall;
+      q.push(sum);
+    }
+
+    root = q.top();
+
+    /*
+     * loop thru freqs to see which are non zero
+     * if non zero
+     *    create a node with that index ascii value as the symbol and the freq 
+     *      as the count
+     *    point the correct index of leaves to this node
+     *    add each new node to the queue!
+     * if zero
+     *    do nothing
+     *
+     * while the queue's size is greater than 1
+     *  remove the 2 lowest count trees
+     *  combine these into new tree
+     *      make a new node with the sum of counts
+     *      adjust pointers
+     *      add the new node back into queue
+     * 
+     * (now tree is built, only one 1 tree left)
+     * change root to point to this last tree left in queue
+     * change leaves
+     */
+
+
+
+}
+
+void HCTree::encode(byte symbol, ofstream& out) const {
+  //XXX
+
+  int sym = (int)symbol;
+  HCNode* current = leaves.at(sym);
+  HCNode* parent = current->p;
+  while (parent) {
+    if (current == parent->c0) {
+      out << '0';
+    }
+
+    else {
+      out << '1';
+    }
+  
+  }
+
+  /*
+   * get ascii val of symbol
+   * go to correct index in leaves
+   * start tracing up parents and getting code
+   *      set curr to leaf
+   *      set parent to leaf's parent p
+   *      while p is not null (we reached root already)
+   *        if curr == parent->c0
+   *           add 0 to out
+   *        else
+   *           add 1 to out
+   */
+
+}
+
+int HCTree::decode(ifstream& in) const {
+  //XXX
+  char i;
+  HCNode* current = root;
+  while (in.get(i)){
+    if (in.get(i) == '0') {
+      current = current->c0;
+    }
+    else {
+      current = current->c1;
+    }
+    
+  }
+
+  return current->symbol;
+  /* 
+   * get first bit of in , looping
+   * current is root
+   * for length of in
+   *    if 0,
+   *       set current to currents c0
+   *    else
+   *       set current to currents c1
+   * return current->symbol
+   */
+
+
+}
+
