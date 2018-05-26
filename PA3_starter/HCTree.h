@@ -7,8 +7,8 @@
 #include <vector>
 #include <fstream>
 #include "HCNode.h"
-//#include "BitInputStream.h"
-//#include "BitOutputStream.h" TODO FOR FINAL SUBM
+#include "BitInputStream.h"
+#include "BitOutputStream.h" //TODO FOR FINAL SUBM
 
 using namespace std;
 
@@ -34,11 +34,14 @@ private:
     vector<HCNode*> leaves;
 
 public:
+
+    // CONSTRUCTOR
     // explicit keyword is used to avoid accidental implicit conversions
     explicit HCTree() : root(0) {
         leaves = vector<HCNode*>(256, (HCNode*) 0);
     }
 
+    // DESTRUCTOR
     ~HCTree(){};
 
     /** Use the Huffman algorithm to build a Huffman coding trie.
@@ -49,24 +52,16 @@ public:
      */
     void build(const vector<int>& freqs);
 
+    /** FINAL
+     *  Write to the given BitOutputStream
+     *  the sequence of bits coding the given symbol.
+     *  PRECONDITION: build() has been called, to create the coding
+     *  tree, and initialize root pointer and leaves vector.
+     */
+    void encode(byte symbol, BitOutputStream& out) const;
 
-
-
-
-
-            /** Write to the given BitOutputStream
-            *  the sequence of bits coding the given symbol.
-            *  PRECONDITION: build() has been called, to create the coding
-            *  tree, and initialize root pointer and leaves vector.
-            */
-            //void encode(byte symbol, BitOutputStream& out) const;
-
-
-
-
-
-
-    /** Write to the given ofstream
+    /** CHECKPOINT
+     *  Write to the given ofstream
      *  the sequence of bits (as ASCII) coding the given symbol.
      *  PRECONDITION: build() has been called, to create the coding
      *  tree, and initialize root pointer and leaves vector.
@@ -75,20 +70,15 @@ public:
      */
     void encode(byte symbol, ofstream& out) const;
 
+    /** FINAL
+     *  Return symbol coded in the next sequence of bits from the stream.
+     *  PRECONDITION: build() has been called, to create the coding
+     *  tree, and initialize root pointer and leaves vector.
+     */
+    int decode(BitInputStream& in) const;
 
-
-
-
-            /** Return symbol coded in the next sequence of bits from the stream.
-            *  PRECONDITION: build() has been called, to create the coding
-            *  tree, and initialize root pointer and leaves vector.
-            */
-            //int decode(BitInputStream& in) const;
-
-
-
-
-    /** Return the symbol coded in the next sequence of bits (represented as 
+    /** CHECKPOINT
+     *  Return the symbol coded in the next sequence of bits (represented as 
      *  ASCII text) from the ifstream.
      *  PRECONDITION: build() has been called, to create the coding
      *  tree, and initialize root pointer and leaves vector.
