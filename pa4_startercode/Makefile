@@ -19,11 +19,12 @@ all: pathfinder
 
 # include what ever source code *.h files pathfinder relies on (these are merely the ones that were used in the solution)
 
-pathfinder: ActorGraph.o ActorNode.o ActorEdge.o
-
-ActorGraph.o: ActorEdge.hpp ActorNode.hpp ActorGraph.h
+pathfinder: pathfinder.o
+pathfinder.o: pathfinder.cpp ActorGraph.o
+#g++ -o pathfinder ActorGraph.o ActorNode.o ActorEdge.o pathfinder.o
+ActorGraph.o: ActorEdge.o ActorNode.o ActorGraph.h
+ActorEdge.o: ActorEdge.hpp ActorNode.o
 ActorNode.o: ActorNode.hpp
-ActorEdge.o: ActorEdge.hpp ActorNode.hpp
 
 
 

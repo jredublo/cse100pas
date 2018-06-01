@@ -10,17 +10,15 @@ using namespace std;
 
 class ActorEdge {
 private:
-    vector<string> sharedMovies;
-    ActorNode partner;
+    vector<string> sharedMovies;    // movies that link the original actornode to partner
+    ActorNode partner;              // partner
 
 public:
-    // constructor
-    ActorEdge(ActorNode coActor):
-        partner(coActor)
-    {
-    }
+    // Constructor
+    ActorEdge(ActorNode coActor)
+        : partner(coActor) { }
 
-    //adds a movie to sharedMovies
+    // Adds a movie to sharedMovies if not present yet
     void addSharedMovie(string movie) {
         if ((find(sharedMovies.begin(), sharedMovies.end(), movie)) 
                 == sharedMovies.end()) {
@@ -28,12 +26,26 @@ public:
         }
     }
 
-    bool operator<(const ActorEdge& other) {
-        return true;
+    // Getters
+    vector<string> getSharedMovies() const {
+        return sharedMovies;
+    }
+    ActorNode getPartner() const {
+        return partner;
     }
 
-    bool operator!=(const ActorEdge& other) {
-        return partner.getName() != other.getName();
+
+    // Overloading Operators
+    bool operator<(const ActorEdge& other) const {
+        return partner.getName() < other.getPartner().getName();
     }
+    
+    bool operator==(const ActorEdge& other) const {
+        if (partner.getName() == other.getPartner().getName()) {
+            return true;
+        }
+        else 
+            return false;
+        }
 
 };

@@ -13,29 +13,37 @@ private:
     vector<string> movies;
 
 public:
-    // constructor
+  // Constructor
     ActorNode(string value) {
         name = value;
     }
     
-    // adds a movie to the movies vector
+  // Adds a movie to the movies vector
     void addMovie(string movie) {
         movies.push_back(movie);
     }
 
-    string getName() const {
-        return name;
+  // Getters
+    string getName() const { 
+        return name; 
     }
-
     vector<string> getMovies() const {
         return movies;
     }
 
-    bool operator<(const ActorNode& one, const ActorNode& other) {
-        return true;
+  // Operator Overloading
+    bool operator<(const ActorNode& other) const {
+        return name < other.getName();
+    }
+    bool operator==(const ActorNode& other) const {
+        if (name == other.getName())
+            return true;
+        else
+            return false;
     }
 
+    /*
     bool operator!=(const ActorNode& other) {
         return name != other.getName();
-    }
+    }*/
 };
