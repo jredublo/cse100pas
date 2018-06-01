@@ -26,7 +26,8 @@ ActorGraph.o: ActorEdge.o ActorNode.o ActorGraph.h
 ActorEdge.o: ActorEdge.hpp ActorNode.o
 ActorNode.o: ActorNode.hpp
 
-
+printGraph: printGraph.o
+printGraph.o: ActorEdge.hpp ActorNode.hpp ActorGraph.h printGraph.cpp 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~for final submission
 

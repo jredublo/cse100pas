@@ -42,7 +42,10 @@ public:
     // Builds the final undirected graph of actor Nodes
     void buildTheMap();
 
-
+    UmapNodes getTheMap() {
+        return theMap;
+    }
+    
 
     /**
      * Load graph from tab-delimited file of actor->movie relationships.

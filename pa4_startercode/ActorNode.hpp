@@ -11,11 +11,16 @@ class ActorNode {
 private:
     string name;
     vector<string> movies;
-
+    
 public:
+    int distance;
+    ActorNode* pred;
+
   // Constructor
     ActorNode(string value) {
         name = value;
+        distance = 1000000; //TODO  
+        pred = NULL;
     }
     
   // Adds a movie to the movies vector

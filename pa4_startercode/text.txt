@@ -1,0 +1,18 @@
+PATHFINDER ALGORITHM: 
+
+
+. make the graph from input file (argv[1]) (same as in printGraph)
+. get the pairs that we need to check from 2nd input file (argv[3])
+. iterate through the whole map and add to the unvisitedQueue  using BFS ??????? 
+. find(first actor call him kevin) in theMap using an iterator and decoy
+. iterate thru kevins connections (adjacent edges)
+    . add 1 to the currDist of them and thencheck if
+    currDist is less than the dist already stored. if 
+    so, dist stored = currDist and addd kevin to their pred members
+. pop 
+
+
+    open an ofstream
+    load in the output file (argv[4])
+    write to ofstream
+    close the ofstream
