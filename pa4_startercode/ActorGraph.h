@@ -13,15 +13,15 @@
 #include <map>
 //#include <unordered_set>
 #include <set>
-#include "ActorEdge.hpp"
-
+#include "ActorNode.hpp"
+//actoredge
 
 using namespace std;
 typedef set<string> StringSet;                // uset of strings
 typedef map<string, StringSet> UmapStrings;   // umap of (strings, StringSet) for movie list  movieMap
 typedef set<ActorEdge> EdgeSet;               // uset of actorEdges
-typedef map<ActorNode, EdgeSet> UmapNodes;    // umap of (ActorNodes, EdgeSet) for graph      theMap
-
+typedef map<ActorNode*, EdgeSet> UmapNodes;    // umap of (ActorNodes, EdgeSet) for graph      theMap
+typedef map<string, ActorNode*> MapAddr;  //map of (actor_name, node address) 
 
 class ActorGraph {
 private:
@@ -30,6 +30,7 @@ private:
     UmapStrings movieMap;       // list of strings for movies and their casts 
     string currentActor;        // used to know if we have moved on to next actor
         // int numActors, int numEdges
+    MapAddr addrMap;            // map for holding the actor name and its node's address
 
 public:
     // Constructor
@@ -45,7 +46,14 @@ public:
     UmapNodes getTheMap() {
         return theMap;
     }
-    
+   
+    UmapStrings getMovieMap() {
+        return movieMap;
+    }
+
+    MapAddr getAddrMap() {
+        return addrMap;
+    }
 
     /**
      * Load graph from tab-delimited file of actor->movie relationships.
@@ -56,6 +64,8 @@ public:
      */
     bool loadFromFile(const char* in_filename, bool use_weighted_edges);
 
+    // finding the shortest path from act1 to act2
+    vector<string> pathFinder(string actor1, string actor2);
 };
 
 

@@ -1,3 +1,13 @@
+
+
+typedef set<string> StringSet;                // uset of strings
+typedef map<string, StringSet> UmapStrings;   // umap of (strings, StringSet) for movie list  movieMap
+typedef set<ActorEdge> EdgeSet;               // uset of actorEdges
+typedef map<ActorNode, EdgeSet> UmapNodes;    // umap of (ActorNodes, EdgeSet) for graph      theMap
+
+
+
+
 PATHFINDER ALGORITHM: 
 
 
@@ -12,7 +22,123 @@ PATHFINDER ALGORITHM:
 . pop 
 
 
+. when we move on to next edge, we check to make sure it isnt the
+  predessor (so we dont go backwards)
+
+
+. erventually when we are at the last node, we construct the path backwards using
+  pred node and if pred = actor 1, thats the end of the path (flip the path so its
+  right order)
+
+
     open an ofstream
     load in the output file (argv[4])
     write to ofstream
     close the ofstream
+
+
+
+
+    ?: - printGraph and pathfinder undefined reference to loadFromFile 
+       - when to build the q? beginning? as we go along and pop (push edges as we pop)?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // we have theMap and all the actor nodes already in it
+    // we need to add the actor edges to their sets
+    // 1) iterate through theMap through all nodes      FOR LOOP 
+    //     - get the nodes movie list                   
+    //     - get the movie in movieMap and get its cast
+    //     - make ActorEdges from cast
+    //     - add Actor Edges to the set of edges of theMap at corresponding actornode **
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+typedef set<string> StringSet;               // uset of strings
+typedef map<string, StringSet> UmapStrings;  // umap (strings, StringSet) for movieMap
+typedef set<ActorEdge> EdgeSet;              // uset of ActorEdges
+typedef map<ActorNode*, EdgeSet> UmapNodes;  // umap(ActorNode*, EdgeSet) for final graph
+typedef map<string, ActorNode*> MapAddr; // map of (actor_name, node address) 
+typedef pair<ActorNode*, EdgeSet> Pear;     // pairs to insert into theMAP
+typedef pair<string, ActorNode*> Kiwi;      // pairs to insert into addrMap
+
+
+
+buildTheMap
+
+iterate thru theMap(pears of actornode* and edgesets)
+    get each actor (call him CURRENTACTOR), his list of movies (THEIRMOVIES)
+      and his edgeset (CURRCONS)
+
+    iterate through his movies hes been in (THEIRMOVIES)
+ 
+        locating each movie(NOWMOVIE) in THEIRMOVIES in movieMap
+        
+        iterate thru each movie's cast
+            get each cast member (CURRENT CAST MATE)
+
+            for each cast member in this cast (that's not CURRENTACTOR)
+                check if a connection exists already (check if there is an ActorEdge
+                in the edge set with a partner name of CURRENTCASTMATE)
+                - exists already:
+                    add NOWMOVIE to their shared movies list in the edge they share
+
+                - does not exist yet:
+                    make an edge for this cast mate
+                        set partner name as this cast mate
+                    something abt the movies here <>
+                        add NOWMOVIE to their shared movies vector
+        
+
+
+
+
+

@@ -14,20 +14,20 @@ ifeq ($(type),opt)
 			    LDFLAGS += -g
 			endif
 
-all: pathfinder 
+all: pathfinder printGraph 
 #FINALSUBBBall: pathfinder actorconnections
 
 # include what ever source code *.h files pathfinder relies on (these are merely the ones that were used in the solution)
 
-pathfinder: pathfinder.o
-pathfinder.o: pathfinder.cpp ActorGraph.o
+pathfinder: pathfinder.o ActorGraph.o
+pathfinder.o: pathfinder.cpp ActorGraph.h
 #g++ -o pathfinder ActorGraph.o ActorNode.o ActorEdge.o pathfinder.o
 ActorGraph.o: ActorEdge.o ActorNode.o ActorGraph.h
-ActorEdge.o: ActorEdge.hpp ActorNode.o
-ActorNode.o: ActorNode.hpp
+ActorEdge.o: ActorEdge.hpp
+ActorNode.o: ActorNode.hpp ActorEdge.o
 
-printGraph: printGraph.o
-printGraph.o: ActorEdge.hpp ActorNode.hpp ActorGraph.h printGraph.cpp 
+printGraph: printGraph.o ActorGraph.o
+printGraph.o: ActorEdge.hpp ActorNode.hpp ActorGraph.h
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~for final submission
 

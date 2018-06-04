@@ -4,19 +4,21 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
-#include "ActorNode.hpp"
+// #include "ActorNode.hpp"
 
 using namespace std;
 
 class ActorEdge {
 private:
     vector<string> sharedMovies;    // movies that link the original actornode to partner
-    ActorNode partner;              // partner
+    string partner;                 // name of partner
+    bool visited;
 
 public:
     // Constructor
-    ActorEdge(ActorNode coActor)
-        : partner(coActor) { }
+    ActorEdge(string coActor)
+        : partner(coActor),
+        visited(false) {}
 
     // Adds a movie to sharedMovies if not present yet
     void addSharedMovie(string movie) {
@@ -30,18 +32,19 @@ public:
     vector<string> getSharedMovies() const {
         return sharedMovies;
     }
-    ActorNode getPartner() const {
+    string /*ActorNode TODO?*/ getPartner() const {
         return partner;
     }
 
 
     // Overloading Operators
     bool operator<(const ActorEdge& other) const {
-        return partner.getName() < other.getPartner().getName();
+        return partner < other.getPartner();
+        // return partner.getName() < other.getPartner().getName();
     }
     
     bool operator==(const ActorEdge& other) const {
-        if (partner.getName() == other.getPartner().getName()) {
+        if (partner == other.getPartner()) {
             return true;
         }
         else 
