@@ -218,25 +218,29 @@ public:
 
 // FNC to find the shortest path b/n two actors
 vector<string> ActorGraph::pathFinder(string actor1, string actor2) {
-    queue<string> q;  // unvisited priority queue
+    priority_queue<string> q;  // TODO make it into djikstra TODO unvisited priority queue
     
     q.push(actor1);     // push first actor to the queue
    
     bool firstIter = true;
 
+    int visitedLastTimes = 0;
+
     while (!q.empty()) {
         // pop first and then get children (set distance and pred) then push to q
         string currentAct = q.front();
         q.pop();
-        cout << "Popping!"<< endl;
-        cout << "ActorName in Pathfinder: " << currentAct << endl;
-        
+       
         // find the first actor in our map, is our start vertex
         MapAddr::iterator addrIt = addrMap.find(currentAct);
         ActorNode* decoy1 = addrIt->second;
         UmapNodes::iterator mapIt = theMap.find(decoy1);
 
-
+        cout << "~~~Popping!"<< endl;
+        cout << "ActorName in Pathfinder: " << currentAct << endl;
+        cout << "distance if any: " << mapIt->first->distance << endl;
+        
+        
         if (firstIter == true) { // first iteration, set dist to 0
             
             ActorNode* firstIterNode = mapIt->first;
