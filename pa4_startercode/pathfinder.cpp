@@ -40,9 +40,17 @@ int main(int argc, char** argv) {
     string thirdIn = argv[3];   // pairs we want
     string fourthIn = argv[4];  // out file
 
+    cout << argv[2] << " IS A BITCHHHHHHH" << endl;
 
     ActorGraph* obj = new ActorGraph();
-    obj->loadFromFile(argv[1], false); // create theMap (our graph)
+    if (argv[2] == "u") {
+        cout << "yassssssss" << endl;
+        obj->loadFromFile(argv[1], false); // create theMap (our graph)
+    }
+    else { 
+        cout << "hell ya" << endl;
+        obj->loadFromFile(argv[1], true);
+    }
     UmapNodes ourMap = obj->getTheMap();
 
     ofstream out(fourthIn);
@@ -51,7 +59,7 @@ int main(int argc, char** argv) {
     ifstream in3(thirdIn);
     bool have_header = false;
     while (in3) {
-    cout << "Here #1" << endl;
+    //cout << "Here #1" << endl;
         string s;
         // get next line
         if (!getline( in3, s)) break;
@@ -64,7 +72,7 @@ int main(int argc, char** argv) {
         istringstream ss(s);
         vector<string> record;
         while(ss) {
-            cout << "Here #2" << endl;
+            //cout << "Here #2" << endl;
             string next;
             // get the next string before hitting a tab char and put into 'next'
             if (!getline(ss, next, '\t')) break;
@@ -75,7 +83,7 @@ int main(int argc, char** argv) {
             continue;
         }
     
-        cout << "Here #3" << endl;
+        //cout << "Here #3" << endl;
         string first_actor(record[0]);
         string last_actor(record[1]);
         
@@ -83,9 +91,10 @@ int main(int argc, char** argv) {
         // pathfinder function for this pair
         vector<string> resultPath = obj->pathFinder(first_actor, last_actor);
        
-
-       // pass into the ofstream
-       out << "hello" << endl;
+        for (unsigned int i = 0; i < resultPath.size(); i++) {
+        // pass into the ofstream
+            out << resultPath.at(i) << endl;
+        }
     }
 
 }

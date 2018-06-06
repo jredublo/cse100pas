@@ -15,10 +15,14 @@ private:
     bool visited;
 
 public:
+    int* weight;
+    
+
     // Constructor
-    ActorEdge(string coActor)
+    ActorEdge(string coActor, int* newInt)
         : partner(coActor),
-        visited(false) {}
+        weight(newInt){
+        }
 
     // Adds a movie to sharedMovies if not present yet
     void addSharedMovie(string movie) {
@@ -36,6 +40,12 @@ public:
         return partner;
     }
 
+    int* getWait() const{
+        return weight;
+    }
+    void setWait(int wait) {
+        *weight = wait;
+    }
 
     // Overloading Operators
     bool operator<(const ActorEdge& other) const {

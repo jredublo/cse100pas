@@ -17,22 +17,16 @@ public:
     int distance;
     ActorNode* pred;
     ActorEdge moviePath;        // edge from pred
+    bool done;  // to determine if a shortest path has already been found to this node
 
   // Constructor
     ActorNode(string value)
         : name(value),
         distance(1000000),
         pred(nullptr),
-        moviePath(ActorEdge("")) {
+        done(false),
+        moviePath(ActorEdge("", nullptr)) {
         }
-    
-    
-   /* {
-        name = value;
-        distance = 1000000; //TODO  
-        pred = NULL;
-        moviePath = ActorEdge("");
-    }*/
     
   // Adds a movie to the movies vector
     void addMovie(string movie) {
@@ -63,10 +57,4 @@ public:
         else
             return false;
     }
-/*
-    bool operator=(const ActorNode& other) const {
-        name = other.getName();
-        movies = other.getMovies();
-        return true;
-    }*/
 };
