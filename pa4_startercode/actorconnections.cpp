@@ -33,33 +33,30 @@ public:
 
 /* Main function: finding the shortest path between 2 actors */
 int main(int argc, char** argv) {
-    priority_queue<ActorNode, vector<ActorNode>, myComp> q;
     
     string firstIn = argv[1];   // all actors/movies
-    string secondIn = argv[2];  // for final sub TODO weighted
-    string thirdIn = argv[3];   // pairs we want
-    string fourthIn = argv[4];  // out file
+    string secondIn = argv[2];  // names of actor pairs
+    string thirdIn = argv[3];   // output file
+    string fourthIn = argv[4];  // widestp or ufind
 
 
     ActorGraph* obj = new ActorGraph();
     
-    //cout << "--" << secondIn << "--" << endl;
-
-    if (secondIn == "u") {
-        obj->loadFromFile(argv[1], false, true); // create theMap (our graph)
+    // true: always weighted edges, false for frmP
+    if (fourthIn == "widestp") { // widestp  TODO TODO TODO TODO TODO
+        obj->loadFromFile(argv[1], true, false); // create theMap (our graph)
     }
-    else { 
-        obj->loadFromFile(argv[1], true, true);
+    else { // ufind
+        // TODO not using our graph, make the sets???? TODO
     }
-    UmapNodes ourMap = obj->getTheMap();
 
-    ofstream out(fourthIn);
+    ofstream out(thirdIn);
 
-    cout << "(actor)--[movie#@year]-->(actor)--..." << endl;
-    out << "(actor)--[movie#@year]-->(actor)--..." << endl;
+    // FILE HEADER
+    cout << "Actor1\tActor2\tYear" << endl;
 
     // read in second input to start getting what pairs we want
-    ifstream in3(thirdIn);
+    ifstream in3(secondIn);
     bool have_header = false;
     while (in3) {
     //cout << "Here #1" << endl;
@@ -90,29 +87,20 @@ int main(int argc, char** argv) {
         string first_actor(record[0]);
         string last_actor(record[1]);
         
+        int result = 0;
+
+        // actorConnections function for this pair
+        if (fourthIn == "ufind")
+            result = obj->actorConnectUF(first_actor, last_actor);
+        else
+            result = obj->actorConnectGraph(first_actor, last_actor);
+
+
+        // OUTPUT to out stream actor1 tabbb actor 2 tabbb year
         
-        // pathfinder function for this pair
-        vector<string> resultPath = obj->pathFinder(first_actor, last_actor);
-       
-        for (unsigned int i = 0; i < resultPath.size(); i++) {
-            // pass into the ofstream
-            // all the odd entries are movies so then if
-            // i % 2 = 1
-            if (i%2 == 1) {
-                // movies in the vector
-                out << "--[" << resultPath.at(i) << "]-->";
-                cout << "--[" << resultPath.at(i) << "]-->";
-            }
-            else {
-                // actors in the vector
-                out << "(" << resultPath.at(i) << ")";
-                cout << "(" << resultPath.at(i) << ")";
-            }
-        }
-        cout << endl;
-        out << endl; // sepereate the pair paths on diff lines
+        cout << first_actor << "\t" << last_actor << "\t" << result << endl; // sepereate the pair paths on diff lines
+        out << first_actor << "\t" << last_actor << "\t" << result << endl; // sepereate the pair paths on diff lines
     }
 
-    out.close();
-
+        out.close(); // close ofstream
 }

@@ -14,7 +14,7 @@ ifeq ($(type),opt)
 			    LDFLAGS += -g
 			endif
 
-all: pathfinder printGraph 
+all: pathfinder printGraph actorconnections 
 #FINALSUBBBall: pathfinder actorconnections
 
 # include what ever source code *.h files pathfinder relies on (these are merely the ones that were used in the solution)
@@ -28,6 +28,11 @@ ActorNode.o: ActorNode.hpp ActorEdge.o
 
 printGraph: printGraph.o ActorGraph.o
 printGraph.o: ActorEdge.hpp ActorNode.hpp ActorGraph.h
+
+
+actorconnections: actorconnections.o ActorGraph.o
+actorconnections.o: actorconnections.cpp ActorGraph.h
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~for final submission
 

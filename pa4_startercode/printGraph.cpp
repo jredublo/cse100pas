@@ -27,7 +27,7 @@ int main (int argc, char** argv) {
     
     // take in an input file, pass as an arg to loadFromFile
     ActorGraph obj;// = new ActorGraph();
-    obj.loadFromFile(argv[1], false);
+    obj.loadFromFile(argv[1], false, true);
     UmapStrings movMap = obj.getMovieMap();
     
     // printing movie map
@@ -64,6 +64,9 @@ int main (int argc, char** argv) {
         for (EdgeSet:: iterator iter = (it->second).begin(); 
                 iter != (it->second).end() ; ++iter) {
             cout << "     connection: " << ((*iter).getPartner()) << endl;
+            vector<string>* what = (*iter).getSharedMovies();
+            for (unsigned int p = 0; p < what->size(); p++) 
+                cout << "          movies: " << what->at(p) << endl;
         }
     }
 }

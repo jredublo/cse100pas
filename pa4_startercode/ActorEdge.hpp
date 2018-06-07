@@ -10,7 +10,7 @@ using namespace std;
 
 class ActorEdge {
 private:
-    vector<string> sharedMovies;    // movies that link the original actornode to partner
+    vector<string>* sharedMovies;    // movies that link the original actornode to partner
     string partner;                 // name of partner
     bool visited;
 
@@ -19,30 +19,37 @@ public:
     
 
     // Constructor
-    ActorEdge(string coActor, int* newInt)
+    ActorEdge(string coActor, int* newInt, vector<string>* newVect)
         : partner(coActor),
-        weight(newInt){
+        weight(newInt),
+        sharedMovies(newVect){
         }
+    // Destructor
+    ~ActorEdge(){
+        //delete sharedMovies;
+        //delete weight;
+    }
+
 
     // Adds a movie to sharedMovies if not present yet
     void addSharedMovie(string movie) {
-        if ((find(sharedMovies.begin(), sharedMovies.end(), movie)) 
-                == sharedMovies.end()) {
-            sharedMovies.push_back(movie);
+        if ((find(sharedMovies->begin(), sharedMovies->end(), movie)) 
+                == sharedMovies->end()) {
+            sharedMovies->push_back(movie);
         }
     }
 
     // Getters
-    vector<string> getSharedMovies() const {
+    vector<string>* getSharedMovies() const {
         return sharedMovies;
     }
-    string /*ActorNode TODO?*/ getPartner() const {
+    string getPartner() const {
         return partner;
     }
-
     int* getWait() const{
         return weight;
     }
+
     void setWait(int wait) {
         *weight = wait;
     }

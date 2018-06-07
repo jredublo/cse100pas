@@ -25,9 +25,14 @@ public:
         distance(1000000),
         pred(nullptr),
         done(false),
-        moviePath(ActorEdge("", nullptr)) {
+        moviePath(ActorEdge("", nullptr,nullptr)) {
         }
-    
+   
+  // Destructor
+    ~ActorNode() {
+        //delete pred;
+    }
+
   // Adds a movie to the movies vector
     void addMovie(string movie) {
         movies.push_back(movie);
