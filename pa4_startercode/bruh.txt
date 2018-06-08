@@ -1,0 +1,134 @@
+
+        set<Movie*>::iterator yeet = movies.begin();
+        Movie* mv = *yeet;
+        string yr = mv->yrtitle;
+        int year = stoi(yr.substr(0,3));    // getting first year
+
+        // getting all the movies
+        for (yeet = movies.begin(); yeet != movies.end(); ++yeet) {
+            Movie* currmv = *yeet;
+            string curryr = mvptr->yrtitle;
+            int curryear = stoi(yr.substr(0, 3));
+            // while year is the same (for each movie from year y)
+            while (curryear == year) {
+                set<UNode*> filmcast = currmv->cast;
+                stack<UNode*> flapjacks;
+                // push cast to a stack all of the cast and then pop two out 
+                // at a time and union those two until we only have 1 left
+                set<UNode*>::iterator YEET;
+                for (YEET = filmcast.begin(); YEET != filmcast.end(); ++YEET) {
+                    UNode* friendo = *YEET;
+                    flapjacks.push(friendo);
+                }
+                // pop 2 at a time and union until we have 1 left
+                while (flapjacks.size() > 2) {
+                    UNode* pop1 = flapjacks.top();
+                    flapjacks.pop();
+                    Unode* pop2 = flapjacks.top();
+                    flapjacks.pop();
+                    UNode* newSentinel = unionSize(pop1, pop2);
+                    flapjacks.push(newSentinel);
+                }
+            }
+        } 
+        
+
+
+
+
+
+
+
+movies:     set of all movies and their casts
+sentinels:  set of all node ptrs (all disconnected in the beginning)
+
+trying to find path between boi1 and boi2
+
+- make dat priority q called q1 and push movie[0] to it
+- if (boi1 != boi2)
+    pop a sentinel called zoe from q1
+    union the whole cast assoc together
+
+    
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+union per movie
+check if connected?
+      its not? go to next movie
+
+
+
+
+
+int finalyr = get the first movie year;
+priority_queue pq1 = pq to store the old sentinels
+
+for each movie {
+    finalyr = this movie's year
+    
+    push the whole cast to the pq  // union the whole cast together
+    if pq is not empty
+        union all the shit together in the pq to get sentinelGOD of union
+    else
+        set sentinelGOD to the sentinel of the og cast
+
+    if (b1 != b2)
+        push the sentinelGOD to pq1
+
+}
+
+return finalyr
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

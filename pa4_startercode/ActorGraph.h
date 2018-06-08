@@ -36,6 +36,7 @@ private:
     string currentActor;        // used to know if we have moved on to next actor
     MapAddr addrMap;            // map for holding the actor name and its node's address
 
+
 public:
     /** Constructor */
     ActorGraph() {
@@ -43,7 +44,7 @@ public:
     }
     
     /** Destructor */
-/*  ~ActorGraph() {
+    /*~ActorGraph() {
         UmapNodes::iterator it;
         for (it = theMap.begin(); it != theMap.end(); ++it) {
             delete it->first;
@@ -55,7 +56,7 @@ public:
     }*/
 
     /** Builds movieMap by line from in file and adds actorNodes to theMap */
-    void buildMovieMap(string actor_name, string wholeMovie);
+    void buildMovieMap(string actor_name, string wholeMovie, bool frmP);
     
     /** Builds theMap, the final undirected graph of ActorNodes */
     void buildTheMap(bool use_weighted_edges, bool frmP);
@@ -98,7 +99,7 @@ public:
     int actorConnectGraph(string actor1, string actor2);
     
     /** Finds the widest path from actor1 and actor2 using sets */
-    int actorConnectUF(string actor1, string actor2);
+    //int actorConnectUF(string actor1, string actor2);
 
     /** Initializes all the weights of the edges. Assumes theMap is set up already */
     void initWeight(string actor_name, bool frmP);

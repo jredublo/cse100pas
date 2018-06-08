@@ -19,19 +19,42 @@ all: pathfinder printGraph actorconnections
 
 # include what ever source code *.h files pathfinder relies on (these are merely the ones that were used in the solution)
 
+
+
+
+
 pathfinder: pathfinder.o ActorGraph.o
 pathfinder.o: pathfinder.cpp ActorGraph.h
-#g++ -o pathfinder ActorGraph.o ActorNode.o ActorEdge.o pathfinder.o
+actorconnections: actorconnections.o ActorGraph.o UUNode.o
+actorconnections.o: actorconnections.cpp ActorGraph.h USet.hpp
+
 ActorGraph.o: ActorEdge.o ActorNode.o ActorGraph.h
 ActorEdge.o: ActorEdge.hpp
 ActorNode.o: ActorNode.hpp ActorEdge.o
+USet.o: UNode.o USet.hpp
+UNode.o: UNode.hpp
 
 printGraph: printGraph.o ActorGraph.o
 printGraph.o: ActorEdge.hpp ActorNode.hpp ActorGraph.h
 
 
-actorconnections: actorconnections.o ActorGraph.o
-actorconnections.o: actorconnections.cpp ActorGraph.h
+
+
+#pathfinder: pathfinder.o ActorGraph.o
+#pathfinder.o: pathfinder.cpp ActorGraph.h
+#ActorGraph.o: ActorEdge.o ActorNode.o ActorGraph.h
+#ActorEdge.o: ActorEdge.hpp
+#ActorNode.o: ActorNode.hpp ActorEdge.o
+
+#USet.o: UNode.o USet.hpp
+#UNode.o: UNode.hpp
+
+#printGraph: printGraph.o ActorGraph.o
+#printGraph.o: ActorEdge.hpp ActorNode.hpp ActorGraph.h
+
+#actorconnections: actorconnections.o ActorGraph.o USet.o
+#actorconnections.o: actorconnections.cpp ActorGraph.h USet.hpp
+
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~for final submission
