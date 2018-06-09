@@ -34,12 +34,14 @@ public:
         parent = par;
     }
 
-    // returns the sentinel node of the calling object
+/*    // returns the sentinel node of the calling object
     UNode* find() {
+        cout << "this unode: " << this << endl;
+        //cout << "this nodes addr: " << &this << endl;
         vector<UNode*> storage;
         UNode* current = this;
         // while the parent still exists, we are not at the sentinel node
-        while (current->parent) {
+        while (current->parent != nullptr) {
             storage.push_back(current);
             current = current->parent;
         }
@@ -50,7 +52,7 @@ public:
             c->parent = current;
         }        
         return current;
-    }
+    } */
    
 
     /** Operator overloading */

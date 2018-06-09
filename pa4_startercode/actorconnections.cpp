@@ -42,12 +42,12 @@ int main(int argc, char** argv)
     string fourthIn = argv[4];                  // widestp or ufind
 
     ActorGraph* obj = new ActorGraph();  // TODO
-    USet disjointSet;
+    // USet disjointSet;
 
     if (fourthIn == "widestp") {                // create graph with weighted edges
         obj->loadFromFile(argv[1], true, false);
     } else {                                    // using sets to get earliest year
-        disjointSet.initialize(argv[1]);
+        //disjointSet.initialize(argv[1]);
     }
 
     // Open ofstream to outfile and add header
@@ -82,9 +82,12 @@ int main(int argc, char** argv)
         
         // Calling actorconnections for this pair
         int result = 0;
-        if (fourthIn == "ufind")    // ufind
+        if (fourthIn == "ufind") {    // ufind
+            //cout << "~~~~~ Creating a new set to reset the sentinels for a new pair!!!" << endl;
+            USet disjointSet; // = new USet();
+            disjointSet.initialize(argv[1]);
             result = disjointSet.actorConnectUF(first_actor, last_actor);
-        else {                      // widestp
+        } else {                      // widestp
             result = obj->actorConnectGraph(first_actor, last_actor);
         }
 

@@ -1,4 +1,16 @@
 
+    // all the graphs.
+    void printSets()  {
+        set<UNode*>::iterator pen;
+        for( pen = sentinels.begin(); pen != sentinels.end(); ++pen) {
+            cout << "~~~~Set belonging to sentinel " << (*pen).name << endl;
+
+        
+        }
+    
+    }
+
+
 
 /** from PFFF.cpp COMPARATOR class to make a min heap and sort nodes */
 /*class myComp
